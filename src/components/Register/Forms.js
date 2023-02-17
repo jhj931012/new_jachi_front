@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { AGREE_DATA } from '@/constants/Register';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { BASE_URL, USER } from "../../config/host-config";
+
+
 
 export const Forms = () => {
 
+  
   // const API_BASE_URL = BASE_URL + USER;
 
   // const registerHandler = e => {
@@ -85,30 +89,59 @@ export const Forms = () => {
       .string()
       .required('비밀번호를 입력해주세요.')
       .oneOf([yup.ref('password'), null], '비밀번호가 일치하지 않습니다.'),
-    username: yup
+    nickname: yup
       .string()
       .min(2, '별명은 최소 2자 이상이어야 합니다')
       .max(15, '별명은 최대 15자 이하여야 합니다.')
       .required('별명을 입력해주세요.'),
   });
 
+  const API_BASE_URL = BASE_URL + USER;
+
+  
   const formik = useFormik({
     // 회원가입 form, 최초 값, form에서 관리할 객체들
     initialValues: {
       email: '',
       password: '',
       confirm_password: '',
-      username: '',
+      nickname: '',
     },
+
+  
     // 유효성 검사
     validationSchema,
 
-    // submit 이벤트 발생 시 실행할 로직 기재
+    //submit 이벤트 발생 시 실행할 로직 기재
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
+      alert(JSON.stringify(values, ['email','password', 'nickname'], 2));
+      fetch(`${API_BASE_URL}/signup`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(values, null, 2)
+    })
+    .then(res => res.json())
+    .then(result => {
+        //console.log(result);
+        if (result.message) {
+            // 로그인 실패
+            alert(result.message);
+        } else {
+            alert('회원가입 성공!');
 
+            // 발급받은 토큰을 저장, 회원정보 저장
+            // 브라우저가 제공 로컬스토리지(브라우저가 종료되어도 남아있음)
+            // 세션스토리지(브라우저종료되면 사라짐)
+            
+
+            window.location.href='/';
+        }
+    });
+    }
+
+
+     
+    });
   return (
     <div>
       <form onSubmit={formik.handleSubmit} >
@@ -123,30 +156,12 @@ export const Forms = () => {
                   placeholder="이메일"
                   name="email"
                   onChange={formik.handleChange}
-                  value={formik.values.email}
+                  value={formik.values.email} 
                   {...formik.getFieldProps('email')}
                 />
               </span>
-              <span>@</span>
-              <div className="select-area">
-                <select className="common-element">
-                  <option>선택해주세요</option>
-                  <option value="naver.com">naver.com</option>
-                  <option value="hanmail.net">hanmail.net</option>
-                  <option value="daum.net">daum.net</option>
-                  <option value="gamil.com">gamil.com</option>
-                  <option value="hotmail.com">hotmail.com</option>
-                  <option value="nate.com">nate.com</option>
-                  <option value="outlook.com">outlook.com</option>
-                  <option value="icloud.com">icloud.com</option>
-                  <option value="_manual">직접입력</option>
-                </select>
-                <span>
-                  <svg width="10" height="10">
-                    <path d="M0 3l5 5 5-5z"></path>
-                  </svg>
-                </span>
-              </div>
+              
+              
             </div>
             {formik.touched.email && formik.errors.email ? (
               <div className="text-danger">{formik.errors.email}</div>
@@ -198,14 +213,14 @@ export const Forms = () => {
               type="type"
               className="common-element"
               placeholder="별명 (2~15자)"
-              title="username"
-              name="username"
-              {...formik.getFieldProps('username')}
+              title="nickname"
+              name="nickname"
+              {...formik.getFieldProps('nickname')}
               onChange={formik.handleChange}
-              value={formik.values.username}
+              value={formik.values.nickname}
             />
-            {formik.touched.username && formik.errors.username ? (
-              <div className="text-danger">{formik.errors.username}</div>
+            {formik.touched.nickname && formik.errors.nickname ? (
+              <div className="text-danger">{formik.errors.nickname}</div>
             ) : null}
           </div>
           <div className="section-chk">
@@ -245,7 +260,7 @@ export const Forms = () => {
             </div>
           </div>
           <div className="submit">
-            <button>회원가입하기</button>
+            <button type="submit">회원가입하기</button>
           </div>
         </fieldset>
       </form>

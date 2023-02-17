@@ -4,6 +4,8 @@ import Link from "next/link";
 
 export const Loginform = () => {
 
+
+
     const User_Area = [
         {
           name: '비밀번호 재설정',
@@ -48,12 +50,15 @@ export const Loginform = () => {
                 // 브라우저가 제공 로컬스토리지(브라우저가 종료되어도 남아있음)
                 // 세션스토리지(브라우저종료되면 사라짐)
                 localStorage.setItem('ACCESS_TOKEN', result.token);
-                localStorage.setItem('LOGIN_USERNAME', result.userName);
+                localStorage.setItem('LOGIN_USERNAME', result.nickname);
 
                 window.location.href='/';
+                console.log(result);
             }
         });
     };
+
+    
 
     return (
       <div className="InputWrap">

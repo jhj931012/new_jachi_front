@@ -10,8 +10,8 @@ BoardList {
     text-align: center;
   }
 
-.hr{
-  margin: 0px;
+.item hr{
+  margin-bottom: 15px;
   padding: 0px;
   height: 1px;
   border: none;
@@ -40,12 +40,12 @@ BoardList {
 }
 
 .nickname{
-  width:30%;
+  width:80%;
   float:left;
 }
 
 .regdate{
-  width:30%;
+  width:20%;
   float:left;
 }
 `

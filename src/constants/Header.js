@@ -24,11 +24,16 @@ export const USER_AREA = [
     path: '/Register',
     id: 2,
   },
+  
+];
+
+export const USER_AREA_LOGIN = [
   {
-    name: '고객센터',
+    name: '로그아웃',
     path: '/',
-    id: 3,
+    id: 1,
   },
+  
 ];
 
 export const CATE_LIST = [

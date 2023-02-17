@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 import { IoChevronDown } from 'react-icons/io5';
 import { useRouter } from 'next/router';
-import { BASE_URL, BOARDList} from '@/config/host-config';
-import { USER_AREA } from '../../constants/Header';
+import { USER_AREA, USER_AREA_LOGIN } from '../../constants/Header';
 import { useState } from 'react';
+import { BASE_URL, BOARDList} from '@/config/host-config';
 
 // const API_BASE_URL = BASE_URL + BOARDList;
 
@@ -26,6 +26,16 @@ import { useState } from 'react';
 //     }
 // });
 // };
+
+
+
+const logoutHandler = e => {
+  localStorage.removeItem('ACCESS_TOKEN');
+  localStorage.removeItem('LOGIN_USERNAME');
+  window.location.href = '/';
+};
+
+
 
 export const UserAreaBlock = styled.div`
   display: flex;
@@ -122,16 +132,17 @@ export const UserAreaBlock = styled.div`
   }
 `;
 
-function UserArea() {
+function UserArea2() {
+
   
   const router = useRouter();
   const [writeList, setWriteList] = useState(false);
   return (
     <UserAreaBlock>
       <div className="LoginArea">
-        {USER_AREA.map(user => (
+        {USER_AREA_LOGIN.map(user => (
           <Link key={user.key} href={user.path} legacyBehavior>
-            <a>{user.name}</a>
+            <a onClick={logoutHandler}>{user.name}</a>
           </Link>
         ))}
       </div>
@@ -140,7 +151,6 @@ function UserArea() {
           type="button"
           onClick={() => {
             setWriteList(!writeList); // link props로 전달해야 함
-            // sessionStorage.getItem('LOGIN_USERNAME');
           }}>
           게시판
           <span>
@@ -295,4 +305,4 @@ function WriteList({ writeList }) {
   );
 }
 
-export default UserArea;
+export default UserArea2;
